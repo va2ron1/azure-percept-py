@@ -109,11 +109,15 @@ class VisionDevice(AzurePercept):
         _azureeye.stop_recording()
         self._is_recording = False
 
-    def get_frame(self):
+    def get_frame(self, cam_mode=2):
         """
         This captures an image using the camera with a numpy array as return type (BGR format - height, width, channels)
+        :param number cam_mode:
+            0 - Native
+            1 - 1080p
+            2 - 720p (default)
         """
-        im = _azureeye.get_frame()
+        im = _azureeye.get_frame(cam_mode)
         im = np.moveaxis(im, 0, -1)
         im = np.ascontiguousarray(im, dtype=np.uint8)
         return im

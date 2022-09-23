@@ -725,8 +725,11 @@ static PyObject *method_getframe(PyObject *self, PyObject *args)
 {
   if (atomicCamOn == false)
   {
-    auto cam_mode = mxIf::CameraBlock::CamMode::CamMode_720p;
-    m_cam.reset(new mxIf::CameraBlock(cam_mode));
+    int cam_mode;
+    if (!PyArg_ParseTuple(args, "i", &cam_mode)) {
+      cam_mode = 2; // mxIf::CameraBlock::CamMode::CamMode_720p;
+    }
+    m_cam.reset(new mxIf::CameraBlock((mxIf::CameraBlock::CamMode)cam_mode));
     m_cam->Start();
     atomicCamOn = true;
     int ret = pthread_create(&threadH264, NULL, h264Thread, NULL);
